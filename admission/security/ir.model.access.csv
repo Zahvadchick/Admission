@@ -1,0 +1,6 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_admission_application,access.admission.application,model_admission_application,,1,1,1,1
+access_custom_model_tags,access.custom.model.tags,model_custom_model_tags,,1,1,1,1
+access_admission_employee,access.admission.employee,model_admission_employee,,1,1,1,1
+access_admission_event,access.admission.event,model_admission_event,,1,1,1,1
+access_custom_model_point,access.custom.model.point,model_custom_model_point,,1,1,1,1

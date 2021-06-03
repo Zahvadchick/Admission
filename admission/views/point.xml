@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <record model = "ir.ui.view" id = "application_tree_view">
+        <field name = "name">custom.model.point.tree</field>
+        <field name = "model">custom.model.point</field>
+        <field name = "arch" type = "xml">
+            <tree>
+                <field name = "employee_id"/>
+                <field name="number"/>
+            </tree>
+        </field>
+    </record>
+
+</odoo>

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <record model="ir.ui.view" id="event_form_view">
+        <field name="name">admission.event.form</field>
+        <field name="model">admission.event</field>
+        <field name="arch" type="xml">
+            <form string="Событие">
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <field name = "description"/>
+                        <field name = "event_time"/>
+                        <field name = "application_id"/>
+                        <field name = "employee_ids"/>
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers"/>
+                    <field name="activity_ids" widget="mail_activity"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="event_calendar" model="ir.ui.view">
+        <field name="name">admission.event.calendar</field>
+        <field name="model">admission.event</field>
+        <field name="arch" type="xml">
+            <calendar string="Календарь событий"
+                      date_start="event_time"
+                      mode="month"
+                      color="name"
+                      quick_add="False">
+                <field name="name"/>
+            </calendar>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window" id = "event_action">
+        <field name = "name"> События </field>
+        <field name="type">ir.actions.act_window</field>
+        <field name = "res_model">admission.event</field>
+        <field name = "view_mode">calendar,form</field>
+    </record>
+
+    <menuitem id = "events_menu" name = "Календарь событий"
+              parent = "main_admission_menu"
+              action = "event_action"/>
+
+</odoo>

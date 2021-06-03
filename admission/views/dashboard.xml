@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <!--<record id="action_sale_order_graph" model="ir.actions.act_window">
+        <field name="name">admission.application.dashboard.graph</field>
+        <field name="model">admission.application</field>
+    </record>-->
+
+    <record id="action_sale_order_calendar" model="ir.actions.act_window">
+        <field name="name">admission.application.dashboard.calendar</field>
+        <field name="model">admission.application</field>
+        <field name="arch" type="xml">
+            <calendar string="Календарь"
+                 date_start="start_date"
+                 date_stop="deadline"
+                 mode="month"
+                 color="employee_id"
+                 quick_add="False">
+                <field name="name"/>
+                <field name="employee_id"/>
+            </calendar>
+        </field>
+    </record>
+
+    <!--<record id="action_sale_order_pivot" model="ir.actions.act_window">
+        <field name="name">admission.application.dashboard.pivot</field>
+        <field name="model">admission.application</field>
+    </record>-->
+
+</odoo>

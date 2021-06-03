@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+     <!-- Заголовок -->
+    <record id="menu_application_form" model="website.menu">
+        <field name="name">Создать заявку</field>
+        <field name="url">/application_webform</field>
+        <field name="parent_id" ref="website.main_menu"/>
+        <field name="sequence">55</field>
+    </record>
+
+    <template id="create_application" name="Create Application">
+        <t t-call="website.layout">
+            <div id="wrap">
+                <div class="oe_structure">
+                    <div class="container">
+                        <form role="form" class="col s12" action="/create/webapplication" method="post" enctype="multipart/form-data">
+                            <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                            <!-- Поле имени и фамилии -->
+                            <div class="form-group">
+                                <label for="name" class="control-label">Fullname</label>
+                                <input type="text" name="name" t-att-value="name" id="name"
+                                       class="form-control" placeholder="например Иванов Иван" required="required"/>
+                            </div>
+                            <!-- Поле электронной почты -->
+                            <div class="form-group">
+                                <label for="email" class="control-label">Email</label>
+                                <input type="email" name="email_id" t-att-value="email_id" id="email_id"
+                                       class="form-control" required="required"/>
+                            </div>
+
+                            <div class="form-group">
+                                <!--<div class="col-lg-3 col-md-4 text-right">
+                                    <label class="col-form-label" for="attachment">Attachment(s)</label>
+                                </div>
+                                <div class="col-lg-7 col-md-8">
+                                    <input type="file" name="attachment" multiple="true"
+                                           accept="image/*,application/pdf,video/*"/>
+                                </div>-->
+                                <label for="file_1" class="control-label">Сonference presentations</label>
+                                <div class="col-lg-7 col-md-8">
+                                    <input type="file" name="file_1"/>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="file_2" class="control-label">Achievements</label>
+                                <div class="col-lg-7 col-md-8">
+                                    <input type="file" name="file_2"/>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="file_3" class="control-label">Motivation letter</label>
+                                <div class="col-lg-7 col-md-8">
+                                    <input type="file" name="file_3" required="required"/>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="file_4" class="control-label">Passport</label>
+                                <div class="col-lg-7 col-md-8">
+                                    <input type="file" name="file_4" required="required"/>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="file_5" class="control-label">Publications</label>
+                                <div class="col-lg-7 col-md-8">
+                                    <input type="file" name="file_5"/>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="file_6" class="control-label">Resume</label>
+                                <div class="col-lg-7 col-md-8">
+                                    <input type="file" name="file_6"/>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="file_7" class="control-label">Letter of recommendation</label>
+                                <div class="col-lg-7 col-md-8">
+                                    <input type="file" name="file_7" required="required"/>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="file_8" class="control-label">Certificate of academic performance</label>
+                                <div class="col-lg-7 col-md-8">
+                                    <input type="file" name="file_8" required="required"/>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="file_9" class="control-label">International language certificate file</label>
+                                <div class="col-lg-7 col-md-8">
+                                    <input type="file" name="file_9" required="required"/>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="img" class="control-label">Photo</label>
+                                <div class="col-lg-7 col-md-8">
+                                    <input type="file" id="img" name="img" accept="image/*" required="required"/>
+                                    <!--<input type="file" name="img" accept="image/*" required="required"/>-->
+                                </div>
+                            </div>
+                            <!-- Кнопка для отправки заявления -->
+                            <div class="clearfix oe_login_buttons">
+                                <button type="submit" class="btn btn-primary pull-left">Send </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+
+    <!-- Оповещение о том, что заявка была создана -->
+    <record id="applicant_thanks" model="website.page">
+        <field name="name">Thanks</field>
+        <field name="type">qweb</field>
+        <field name="url">/applicant-thank-you</field>
+        <field name="website_published">True</field>
+        <field name="key">admission.applicant_thanks</field>
+        <field name="arch" type="xml">
+            <t name="Thanks" t-name="admission.applicant_thanks">
+                <t t-call="website.layout">
+                  <div id="wrap">
+                    <div class="container">
+                        <h1>Спасибо!</h1>
+                        <div class="row">
+                            <div class="col-lg-8">
+                                <div class="alert alert-success" role="status">
+                                    Заявка успешно создана
+                                </div>
+                                <p>
+                                    Ожидайте результаты рассмотрения вашей заявки
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                  </div>
+                </t>
+            </t>
+        </field>
+    </record>
+
+</odoo>

@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <!-- Карточка заявки -->
+    <record model = "ir.ui.view" id = "application_form_view">
+        <field name = "name">application.form</field>
+        <field name = "model">admission.application</field>
+        <field name = "arch" type = "xml">
+            <!-- Вид карточки -->
+            <form string = "Application Form">
+                <header>
+                    <button name="button_assigned" string = "Назначить" progress="in progress" class="oe_highlight" type="object"/>
+                    <button name="action_send_email" type="object" string="Отправить письмо" class="oe_highlight"/>
+                    <field name="progress" widget="statusbar" statusbar_visible="assigned,in progress,done"/>
+                </header>
+                <sheet>
+                    <field name = "image" widget = "image" class = "oe_avatar"/>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name = "email_id" widget = "email"/>
+                            <field name = "state"/>
+                            <field name = "set_priority" widget="priority"/>
+                        </group>
+                        <group>
+                            <field name = "start_date"/>
+                            <field name = "deadline"/>
+                            <field name = "set_tags" widget = "many2many_tags" options = "{'color_field': 'color'}"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name = "description"/>
+                    </group>
+                    <notebook>
+                        <page string="Документы">
+                            <group>
+                                <field name = "link" widget="url"/>
+                            </group>
+                            <field name="documents" widget="many2many_binary" string="Прикрепить файл"/>
+                        </page>
+                        <page string="Назначенные проверяющие">
+                            <field name="employee_ids" widget="many2many_kanban">
+                                <kanban quick_create="false" create="true" delete="true">
+                                    <field name = "id"/>
+                                    <field name = "image"/>
+                                    <templates>
+                                        <!--<t t-name="kanban-box">
+                                            <div class="oe_kanban_global_click" style="position: relative">
+                                                <a t-if="! read_only_mode" type="delete" style="position: absolute; right: 0; padding: 4px; diplay: inline-block">X</a>
+                                                <div class="oe_module_vignette">
+                                                    <img t-att-src="kanban_image('admission.employee', 'image', record.id.value)" class="oe_avatar"/>
+
+                                                    <field name="name"/>
+                                                </div>
+                                            </div>
+                                        </t> -->
+                                        <t t-name="kanban-box">
+                                            <div class="oe_kanban_global_click o_kanban_record_has_image_fill admission_application_kanban">
+                                                <t t-if="record.image.raw_value">
+                                                    <div class="o_kanban_image_fill_left d-none d-md-block"
+                                                         t-attf-style="background-image:url('#{kanban_image('admission.employee', 'image', record.id.raw_value)}')"/>
+                                                </t>
+                                                <div class="oe_kanban_details">
+                                                    <strong class="o_kanban_record_title"><field name="display_name"/></strong>
+                                                    <div class="o_kanban_tags_section"/>
+                                                </div>
+                                            </div>
+                                        </t>
+                                    </templates>
+                                </kanban>
+                            </field>
+                        </page>
+                        <page string="Оценки">
+                            <field name = "set_points"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <!-- Комменты под формой карточки -->
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers"/>
+                    <field name="activity_ids" widget="mail_activity"/>
+                    <field name="message_ids" widget="mail_thread" options="{'post_refresh': 'recipients'}"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- Вид списка -->
+    <record model = "ir.ui.view" id = "application_tree_view">
+        <field name = "name">application.tree</field>
+        <field name = "model">admission.application</field>
+        <field name = "arch" type = "xml">
+            <tree>
+                <field name = "name"/>
+                <field name = "email_id"/>
+                <field name = "state"/>
+                <field name = "start_date"/>
+                <field name = "deadline"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Поиск -->
+    <record model = "ir.ui.view" id = "application_search_view">
+        <field name = "name">application.search</field>
+        <field name = "model">admission.application</field>
+        <field name = "arch" type = "xml">
+            <search>
+                <field name = "name"/>
+                <field name = "employee_ids"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="application_kanban" model="ir.ui.view">
+        <field name="name">admission.application.kanban</field>
+        <field name="model">admission.application</field>
+        <field name="arch" type="xml">
+            <kanban default_group_by = "state" quick_create = "false">
+                <field name = "id"/>
+                <field name = "image"/>
+                <field name = "set_priority"/>
+                <field name = "set_tags"/>
+                <field name = "deadline"/>
+                <field name = "employee_ids"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div class="oe_kanban_global_click o_kanban_record_has_image_fill admission_application_kanban">
+                            <t t-if="record.image.raw_value">
+                                <div class="o_kanban_image_fill_left d-none d-md-block"
+                                     t-attf-style="background-image:url('#{kanban_image('admission.application', 'image', record.id.raw_value)}')"/>
+                            </t>
+                            <div class="oe_kanban_details">
+                                <strong class="o_kanban_record_title"><field name="display_name"/></strong>
+                                <div class="o_kanban_tags_section"/>
+                                <ul>
+                                    <li><field name="set_tags" widget="many2many_tags" options="{'color_field': 'color'}"/></li>
+                                    <li>Крайний срок : <field name="deadline"/></li>
+                                    <li><field name = "set_priority" widget="priority"/></li>
+                                    <field name = "employee_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
+                                </ul>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <record id="application_calendar" model="ir.ui.view">
+        <field name="name">admission.application.calendar</field>
+        <field name="model">admission.application</field>
+        <field name="arch" type="xml">
+            <calendar string="Календарь"
+                 date_start="start_date"
+                 date_stop="deadline"
+                 mode="month"
+                 color="name"
+                 quick_add="False">
+                <field name="name"/>
+            </calendar>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window" id = "application_list_action">
+        <field name = "name">Заявки</field>
+        <field name = "res_model">admission.application</field>
+        <field name = "view_mode">kanban,tree,form,calendar</field>
+        <field name = "help" type = "html">
+            <p class = "o_view_nocontent_smiling_face">На данный момент нет заявок
+            </p>
+        </field>
+    </record>
+
+    <menuitem id = "main_admission_menu" name = "Admission" />
+
+    <menuitem id = "applications_menu" name = "Заявления"
+              parent = "main_admission_menu"
+              action = "application_list_action"/>
+</odoo>
