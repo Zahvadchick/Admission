@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from datetime import timedelta, datetime
-from odoo import models, fields, api
+from odoo import models, fields, api, _
 
 
 class CustomModelPoint(models.Model):
@@ -16,6 +16,7 @@ AVAILABLE_PRIORITIES = [
     ('2', 'Средний'),
     ('3', 'Высокий'),
     ('4', 'Крайне высокий')]
+
 
 class Application(models.Model):
     _name = 'admission.application'
@@ -59,7 +60,7 @@ class Application(models.Model):
     def _expand_states(self, states, domain, order):
         return [key for key, val in type(self).state.selection]
 
-    def action_send_email(self):
+    """def action_send_email(self):
         self.ensure_one()
         ir_model_data = self.env['ir.model.data']
         try:
@@ -87,22 +88,30 @@ class Application(models.Model):
             'view_id': compose_form_id,
             'target': 'new',
             'context': ctx,
-        }
+        }"""
 
     def button_assigned(self):
+        """s = 'Дедлайн' + self.name
+        self.env['admission.event'].sudo().create({
+            'name': s,
+            'employee_ids': self.employee_ids,
+            'event_time': self.deadline,
+            'description': self.description,
+            'application_id': self,
+            'color': 11
+        })"""
         for rec in self:
             rec.write({'progress': 'in progress'})
         for emp in self.employee_ids:
-            #self.env['custom.model.point'].sudo().create({
-                #'employee_id ': emp
-            #})
+            """num = self.env['custom.model.point'].create()
+            num.write({'employee_id': emp})"""
             template_id = self.env.ref('admission.application_email_template').id
             template = self.env['mail.template'].browse(template_id)
             template.write({'email_to': emp.email_id})
             template.send_mail(self.id, force_send=True)
 
     @api.onchange('state')
-    def change_fields(self):
+    def _change_fields(self):
         for rec in self:
             rec.write({'progress': 'assigned'})
 

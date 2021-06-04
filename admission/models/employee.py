@@ -1,17 +1,16 @@
 # -*- coding: utf-8 -*-
 from odoo import fields, models, api
 
+"""class User(models.Model):
+    _name = 'res.users'
+    _inherit = ['res.users']
+
+    employee_id = fields.Many2one(comodel_name = 'admission.employee', string='Контакт')"""
 
 class Employee(models.Model):
     _name = 'admission.employee'
     _inherit = ['mail.thread', 'mail.activity.mixin']
     _description = 'Член комиссии'
-
-    @api.onchange('user_id')
-    def change_fields(self):
-        for rec in self:
-            if rec.user_id:
-                rec.name = rec.user_id.name
                 
     name = fields.Char(string="Имя сотрудника", required=True)
     email_id = fields.Char(string="Email")
@@ -51,3 +50,9 @@ class Employee(models.Model):
             'target': 'new',
             'context': ctx,
         }
+
+    """@api.onchange('user_id')
+    def _change_fields(self):
+        user_id.update({
+            'employee_id': self
+        })"""

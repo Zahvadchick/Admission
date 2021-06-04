@@ -9,7 +9,7 @@
             <form string = "Application Form">
                 <header>
                     <button name="button_assigned" string = "Назначить" progress="in progress" class="oe_highlight" type="object"/>
-                    <button name="action_send_email" type="object" string="Отправить письмо" class="oe_highlight"/>
+                    <!--<button name="action_send_email" type="object" string="Отправить письмо" class="oe_highlight"/>-->
                     <field name="progress" widget="statusbar" statusbar_visible="assigned,in progress,done"/>
                 </header>
                 <sheet>
@@ -90,8 +90,8 @@
 
     <!-- Вид списка -->
     <record model = "ir.ui.view" id = "application_tree_view">
-        <field name = "name">application.tree</field>
-        <field name = "model">admission.application</field>
+        <field name = "name" >application.tree</field>
+        <field name = "model" >admission.application</field>
         <field name = "arch" type = "xml">
             <tree>
                 <field name = "name"/>

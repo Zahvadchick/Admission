@@ -35,17 +35,4 @@ class Admission(http.Controller):
         application.update({
             'image': base64.b64encode(image.read())
         })
-        """attachments = request.env['ir.attachment']
-        file_name = post.get('img').filename
-        file = post.get('img')
-        attachment_id = attachments.create({
-            'name': file_name,
-            'type': 'binary',
-            'datas': base64.b64encode(file.read()),
-            'res_model': 'model.model',
-            'res_id': application.id
-        })
-        application.update({
-            'image': attachment_id.id
-        })"""
         return request.render("admission.applicant_thanks", {})
