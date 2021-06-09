@@ -1,11 +1,13 @@
 # -*- coding: utf-8 -*-
 from odoo import fields, models, api
 
+
 """class User(models.Model):
     _name = 'res.users'
     _inherit = ['res.users']
 
-    employee_id = fields.Many2one(comodel_name = 'admission.employee', string='Контакт')"""
+    employee = fields.Many2one('admission.employee',string='Контакт')"""
+
 
 class Employee(models.Model):
     _name = 'admission.employee'
@@ -51,8 +53,9 @@ class Employee(models.Model):
             'context': ctx,
         }
 
-    """@api.onchange('user_id')
+    '''@api.onchange('user_id')
     def _change_fields(self):
-        user_id.update({
-            'employee_id': self
-        })"""
+        print("hello")
+        self.user_id.update({
+            'employee': self.id
+        })'''

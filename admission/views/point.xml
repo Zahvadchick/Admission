@@ -5,8 +5,20 @@
         <field name = "name">custom.model.point.tree</field>
         <field name = "model">custom.model.point</field>
         <field name = "arch" type = "xml">
-            <tree>
+            <tree create="0" delete="false">
                 <field name = "employee_id"/>
+                <field name = "number"/>
+            </tree>
+        </field>
+    </record>
+
+    <record model = "ir.ui.view" id = "archive_point_tree_view">
+        <field name = "name">archive.point.tree</field>
+        <field name = "model">archive.point</field>
+        <field name = "arch" type = "xml">
+            <tree create="0" delete="false">
+                <field name = "employee_id"/>
+                <field name = "state"/>
                 <field name = "number"/>
             </tree>
         </field>

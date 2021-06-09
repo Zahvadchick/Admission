@@ -1,13 +1,17 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 
+access_admission_application_admin,access.admission.application.admin,model_admission_application,,1,1,1,1
+
 access_admission_application_admin,access.admission.application.admin,model_admission_application,admission.group_admission_admin,1,1,1,1
 access_custom_model_tags_admin,access.custom.model.tags.admin,model_custom_model_tags,admission.group_admission_admin,1,1,1,1
 access_admission_employee_admin,access.admission.employee.admin,model_admission_employee,admission.group_admission_admin,1,1,1,1
 access_admission_event_admin,access.admission.event.admin,model_admission_event,admission.group_admission_admin,1,1,1,1
 access_custom_model_point_admin,access.custom.model.point.admin,model_custom_model_point,admission.group_admission_admin,1,1,1,1
+access_archive_point_admin,access.archive.point.admin,model_archive_point,admission.group_admission_admin,1,1,1,1
 
 access_admission_application_employee,access.admission.application.employee,model_admission_application,admission.group_admission_employee,1,1,0,0
 access_custom_model_tags_employee,access.custom.model.tags.employee,model_custom_model_tags,admission.group_admission_employee,1,1,1,0
 access_admission_employee_employee,access.admission.employee.employee,model_admission_employee,admission.group_admission_employee,1,0,0,0
 access_admission_event_employee,access.admission.event.employee,model_admission_event,admission.group_admission_employee,1,1,1,0
-access_custom_model_point_employee,access.custom.model.point.employee,model_custom_model_point,admission.group_admission_employee,1,1,1,0
+access_custom_model_point_employee,access.custom.model.point.employee,model_custom_model_point,admission.group_admission_employee,1,1,0,0
+access_archive_point_employee,access.archive.point.employee,model_archive_point,admission.group_admission_employee,1,0,0,0

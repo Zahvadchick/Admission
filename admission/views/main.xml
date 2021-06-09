@@ -74,7 +74,24 @@
                             </field>
                         </page>
                         <page string="Оценки">
-                            <field name = "set_points"/>
+                            <field name = "set_points">
+                                <form>
+                                    <group>
+                                        <field name = "number"/>
+                                        <field name = "justification"/>
+                                    </group>
+                                </form>
+                            </field>
+                        </page>
+                        <page string="Архив оценок">
+                            <field name = "archive_points">
+                                <form>
+                                    <group>
+                                        <field name = "number"/>
+                                        <field name = "justification"/>
+                                    </group>
+                                </form>
+                            </field>
                         </page>
                     </notebook>
                 </sheet>
@@ -166,7 +183,7 @@
     </record>
 
     <record model="ir.actions.act_window" id = "application_list_action">
-        <field name = "name">Заявки</field>
+        <field name = "name">Заявления</field>
         <field name = "res_model">admission.application</field>
         <field name = "view_mode">kanban,tree,form,calendar</field>
         <field name = "help" type = "html">

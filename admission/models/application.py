@@ -7,7 +7,40 @@ class CustomModelPoint(models.Model):
     _name = 'custom.model.point'
 
     employee_id = fields.Many2one('admission.employee', string = 'Сотрудник, выставивший оценку')
+    application_id = fields.Many2one('admission.application', invisible=1)
+    justification = fields.Text(string="Обоснование")
     number = fields.Integer(string = 'Оценка')
+    state = fields.Selection([
+        ('na', 'Нераспределенные'),
+        ('primary rejected', 'Первично отбракованные'),
+        ('primary accepted', 'Первично поступившие'),
+        ('reviewed by the curator', 'Рассмотренние куратором'),
+        ('reviewed by the members of the commission', 'Рассмотренние членами комиссии'),
+        ('additional actions are required', 'Требуются дополнительные действия'),
+        ('reviewed', 'Рассмотренные'),
+        ('added to ACAB', 'Внесено в ACAB'),
+        ('closed', 'Закрытые'),
+    ], string="Статус", group_expand='_expand_states', index=True)
+
+
+class ArchivePoint(models.Model):
+    _name = 'archive.point'
+
+    employee_id = fields.Many2one('admission.employee', string='Сотрудник, выставивший оценку')
+    application_id = fields.Many2one('admission.application', invisible=1)
+    justification = fields.Text(string="Обоснование")
+    number = fields.Integer(string='Оценка')
+    state = fields.Selection([
+        ('na', 'Нераспределенные'),
+        ('primary rejected', 'Первично отбракованные'),
+        ('primary accepted', 'Первично поступившие'),
+        ('reviewed by the curator', 'Рассмотренние куратором'),
+        ('reviewed by the members of the commission', 'Рассмотренние членами комиссии'),
+        ('additional actions are required', 'Требуются дополнительные действия'),
+        ('reviewed', 'Рассмотренные'),
+        ('added to ACAB', 'Внесено в ACAB'),
+        ('closed', 'Закрытые'),
+    ], string="Статус", group_expand='_expand_states', index=True)
 
 
 AVAILABLE_PRIORITIES = [
@@ -46,10 +79,12 @@ class Application(models.Model):
     ], required = True, default = 'na', string="Статус", group_expand='_expand_states', index=True)
     set_priority = fields.Selection(AVAILABLE_PRIORITIES, string = "Приоритет")
     set_tags = fields.Many2many(comodel_name='custom.model.tags', string="Теги")
-    set_points = fields.Many2many(comodel_name='custom.model.point', string="Оценки")
+    set_points = fields.One2many('custom.model.point', 'application_id', string = 'Оценки')
+    archive_points = fields.One2many('archive.point', 'application_id', readonly = "True",
+                                     string = 'Оценки за все этапы')
     employee_ids = fields.Many2many('admission.employee', 'admission_application_rel', 'application_id_rec',
                                     'employee_id_rec',
-                                  string='Проверяющие')
+                                    string='Проверяющие')
     progress = fields.Selection([
         ('assigned', 'Назначается'),
         ('in progress', 'В процессе'),
@@ -91,20 +126,31 @@ class Application(models.Model):
         }"""
 
     def button_assigned(self):
-        """s = 'Дедлайн' + self.name
-        self.env['admission.event'].sudo().create({
+        for a_point in self.set_points:
+            a_num = self.env['archive.point'].create({
+                'employee_id': a_point.employee_id.id,
+                'application_id': a_point.application_id.id,
+                'justification': a_point.justification,
+                'number': a_point.number,
+                'state': a_point.state})
+            self.update({'archive_points': [(4, a_num.id)]})
+
+        s = 'Дедлайн ' + self.name
+        self.env['admission.event'].create({
             'name': s,
             'employee_ids': self.employee_ids,
             'event_time': self.deadline,
             'description': self.description,
-            'application_id': self,
-            'color': 11
-        })"""
-        for rec in self:
-            rec.write({'progress': 'in progress'})
+            'application_id': self.id
+        })
+        self.write({'progress': 'in progress',
+                    'set_points': [(5, 0, 0)]})
         for emp in self.employee_ids:
-            """num = self.env['custom.model.point'].create()
-            num.write({'employee_id': emp})"""
+            num = self.env['custom.model.point'].create({
+                'employee_id': emp.id,
+                'application_id': self.id,
+                'state': self.state})
+            self.update({'set_points': [(4, num.id)]})
             template_id = self.env.ref('admission.application_email_template').id
             template = self.env['mail.template'].browse(template_id)
             template.write({'email_to': emp.email_id})
@@ -112,8 +158,8 @@ class Application(models.Model):
 
     @api.onchange('state')
     def _change_fields(self):
-        for rec in self:
-            rec.write({'progress': 'assigned'})
+        self.write({'deadline': None})
+        self.write({'progress': 'assigned'})
 
 
 class CustomModelTags(models.Model):
